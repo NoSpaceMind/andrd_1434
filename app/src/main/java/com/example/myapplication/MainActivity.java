@@ -1,8 +1,6 @@
 package com.example.myapplication;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +9,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
+    ArrayList<String> questionsList = new ArrayList<>();      //коллекция Списка городов
 
     private TextView textView;
     private Button yesBtn;
@@ -27,8 +30,10 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private int questionIndex = 0; // номер вопроса
+    private int questionNumber = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Log.d("SYSTEM INFO","Метод onCreate() запущен");
         setContentView(R.layout.activity_main);
@@ -37,20 +42,33 @@ public class MainActivity extends AppCompatActivity {
             questionIndex = savedInstanceState.getInt("questionIndex");
         }
 
-        textView = findViewById(R.id.textView);
+        textView = findViewById(R.id.textView);         // соединяем переменные с кнопками
         yesBtn = findViewById(R.id.yesBtn);
         noBtn = findViewById(R.id.noBtn);
         showAnswer = findViewById(R.id.showAnswer);
 
         textView.setText(questions[questionIndex].getQuestionResId());
+
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (questions[questionIndex].isAnswerTrue())
+                if (questions[questionIndex].isAnswerTrue()){
                     Toast.makeText(MainActivity.this,R.string.correct,Toast.LENGTH_SHORT).show();
-                else
+                    questionsList.add(getString(R.string.correct));
+                }
+                else{
                     Toast.makeText(MainActivity.this,R.string.incorrect,Toast.LENGTH_SHORT).show();
-                questionIndex = (questionIndex+1)%questions.length;
+                    questionsList.add(getString(R.string.incorrect));
+                }
+
+                questionIndex = (questionIndex+1)%questions.length;             //переход на след. вопрос
+                questionNumber++;
+                if (questionNumber == 5){
+                    questionNumber = 0;
+                    Intent intent = new Intent(MainActivity.this, ResultActivity.class);      // откуда идем, куда идём
+                    intent.putExtra("list", questionsList);                // отправить информацию в intent в контейнере "answer"
+                    startActivity(intent);}                                                                 // запускаем этот intent
+
                 textView.setText(questions[questionIndex].getQuestionResId());
             }
         });
@@ -58,23 +76,37 @@ public class MainActivity extends AppCompatActivity {
         noBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (questions[questionIndex].isAnswerTrue())
-                    Toast.makeText(MainActivity.this,R.string.incorrect,Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(MainActivity.this,R.string.correct,Toast.LENGTH_SHORT).show();
-                questionIndex = (questionIndex+1)%questions.length;
+                if (questions[questionIndex].isAnswerTrue()) {
+                    Toast.makeText(MainActivity.this, R.string.incorrect, Toast.LENGTH_SHORT).show();
+                    questionsList.add(getString(R.string.incorrect));
+                }
+                else {
+                    Toast.makeText(MainActivity.this, R.string.correct, Toast.LENGTH_SHORT).show();
+                    questionsList.add(getString(R.string.correct));
+                }
+
+                questionIndex = (questionIndex+1)%questions.length;            // переход на след. вопрос
+                questionNumber++;
+                if (questionNumber == 5){
+                    questionNumber = 0;
+                    Intent intent = new Intent(MainActivity.this, ResultActivity.class);      // откуда идем, куда идём
+                    intent.putExtra("list", questionsList);                // отправить информацию в intent в контейнере "answer"
+                    startActivity(intent);}                                                                 // запускаем этот intent
+
                 textView.setText(questions[questionIndex].getQuestionResId());
+
             }
         });
 
-        showAnswer.setOnClickListener(new View.OnClickListener() {
+        showAnswer.setOnClickListener(new View.OnClickListener() {                                    // Показать ответ
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AnswerActivity.class);
-                intent.putExtra("answer",questions[questionIndex].isAnswerTrue());
-                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, AnswerActivity.class);    // откуда идем, куда идём
+                intent.putExtra("answer",questions[questionIndex].isAnswerTrue());              // отправить информацию в intent в контейнере "answer"
+                startActivity(intent);                                                                // намерение - запустить этот intent
             }
         });
+        System.out.println("____________questionsList: " + questionsList);
     }
 
     @Override

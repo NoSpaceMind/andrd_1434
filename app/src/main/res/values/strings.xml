@@ -1,14 +1,16 @@
 <resources>
     <string name="app_name">My Application</string>
-    <string name="question1">2+2=4</string>
-    <string name="question2">8–5=4</string>
-    <string name="question3">9–4=6</string>
-    <string name="question4">3+4=7</string>
-    <string name="question5">6–2=4</string>
+    <string name="question1">Могда машина едет, крутится ли воздух внутри колес?</string>
+    <string name="question2">Является ли каша в голове - пищей для ума?</string>
+    <string name="question3">Можно ли похудеть, убегая от проблем?</string>
+    <string name="question4">Есть ли буквы крупнее, чем «ШБ»?</string>
+    <string name="question5">Если ничто не вечно, то вечна ли вечность?</string>
     <string name="correct">Правильно</string>
     <string name="incorrect">Неправильно</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="correct_answer">Правильный ответ:</string>
     <string name="show_answer">Показать ответ</string>
+    <string name="results">РЕЗУЛЬТАТЫ</string>
+
 </resources>
